@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import NextLink from "next/link";
 import Image from "next/image";
@@ -11,15 +12,17 @@ import {
   createTheme,
   ThemeProvider,
   CssBaseline,
-  Switch
+  Switch,
+  Badge
 } from "@material-ui/core";
+import ShoppingCartTwoToneIcon from "@material-ui/icons/ShoppingCartTwoTone";
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 
-export default function Layout({ title, description, children }) {
+function Layout({ title, description, children }) {
   const { state, dispatch } = useContext(Store);
-  const { darkMode } = state;
+  const { darkMode, cart } = state;
   const theme = createTheme({
     typography: {
       h1: {
@@ -40,6 +43,18 @@ export default function Layout({ title, description, children }) {
       },
       secondary: {
         main: "#208080"
+      },
+      error: {
+        main: "#f44336"
+      },
+      warning: {
+        main: "#ff9800"
+      },
+      info: {
+        main: "#2196f3"
+      },
+      success: {
+        main: "#4caf50"
       }
     }
   });
@@ -89,9 +104,20 @@ export default function Layout({ title, description, children }) {
               <Switch
                 checked={darkMode}
                 onChange={darkModeChangeHandler}
+                color="secondary"
+                name="darkMode-Checkbox"
+                inputProps={{ "aria-label": "secondary darkMode-Checkbox" }}
               ></Switch>
               <NextLink href="/cart" passHref>
-                <Link>Cart</Link>
+                <Link>
+                  <Badge
+                    color="error"
+                    badgeContent={cart.cartItems.length}
+                    showZero
+                  >
+                    <ShoppingCartTwoToneIcon />
+                  </Badge>
+                </Link>
               </NextLink>
               <NextLink href="/login" passHref>
                 <Link>Login</Link>
@@ -107,3 +133,5 @@ export default function Layout({ title, description, children }) {
     </div>
   );
 }
+
+export default dynamic(() => Promise.resolve(Layout), { ssr: false });
