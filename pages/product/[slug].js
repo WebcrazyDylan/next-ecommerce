@@ -1,10 +1,12 @@
 import React from "react";
 import NextLink from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/dist/client/router";
 import Layout from "../../components/Layout";
-import data from "../../utils/data";
 import useStyles from "../../utils/styles";
+// import { useRouter } from "next/dist/client/router";
+// import data from "../../utils/data";
+import Product from "../../models/Product";
+import db from "../../utils/MongoDB";
 import {
   Button,
   Card,
@@ -15,11 +17,12 @@ import {
   Typography
 } from "@material-ui/core";
 
-export default function ProductScreen() {
+export default function ProductScreen(props) {
+  const { product } = props;
   const classes = useStyles();
-  const router = useRouter();
-  const { slug } = router.query;
-  const product = data.products.find((a) => a.slug === slug);
+  // const router = useRouter();
+  // const { slug } = router.query;
+  // const product = data.products.find((a) => a.slug === slug);
   if (!product) {
     return <div>Product Not Found</div>;
   }
@@ -101,4 +104,18 @@ export default function ProductScreen() {
       </Grid>
     </Layout>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { slug } = params;
+
+  await db.connect();
+  const product = await Product.findOne({ slug }).lean();
+  await db.disconnect();
+  return {
+    props: {
+      product: db.convertDocToObj(product)
+    }
+  };
 }
