@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import NextLink from "next/link";
@@ -13,16 +13,63 @@ import {
   ThemeProvider,
   CssBaseline,
   Switch,
-  Badge
+  Badge,
+  Menu,
+  MenuItem,
+  Zoom,
+  useScrollTrigger,
+  Fab,
+  IconButton
 } from "@material-ui/core";
-import ShoppingCartTwoToneIcon from "@material-ui/icons/ShoppingCartTwoTone";
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
+import ShoppingCartTwoToneIcon from "@material-ui/icons/ShoppingCartTwoTone";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import ContactsTwoToneIcon from "@material-ui/icons/ContactsTwoTone";
+import { SupervisorAccountTwoTone } from "@material-ui/icons";
 
-function Layout({ title, description, children }) {
+function ScrollTop(props) {
+  const { children, window } = props;
+  const classes = useStyles();
+  // Note that you normally won't need to set the window ref as useScrollTrigger
+  // will default to window.
+  // This is only being set here because the demo is in an iframe.
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+    disableHysteresis: true,
+    threshold: 100
+  });
+
+  const handleClick = (event) => {
+    const anchor = (event.target.ownerDocument || document).querySelector(
+      "#back-to-top-anchor"
+    );
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  return (
+    <Zoom in={trigger}>
+      <div
+        onClick={handleClick}
+        role="presentation"
+        className={classes.scrolltop}
+      >
+        {children}
+      </div>
+    </Zoom>
+  );
+}
+
+function Layout(props) {
+  const { title, description, children } = props;
+  const router = useRouter();
   const { state, dispatch } = useContext(Store);
-  const { darkMode, cart } = state;
+  const { darkMode, cart, userInfo } = state;
   const theme = createTheme({
     typography: {
       h1: {
@@ -42,7 +89,7 @@ function Layout({ title, description, children }) {
         main: "#f2103a"
       },
       secondary: {
-        main: "#208080"
+        main: "#8710d8"
       },
       error: {
         main: "#f44336"
@@ -64,6 +111,22 @@ function Layout({ title, description, children }) {
     const newDarkMode = !darkMode;
     Cookies.set("darkMode", newDarkMode ? "ON" : "OFF");
   };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const loginClickHandler = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+  const loginMenuCloseHandler = () => {
+    setAnchorEl(null);
+  };
+  const logoutClickHandler = () => {
+    setAnchorEl(null);
+    dispatch({ type: "USER_LOGOUT" });
+    Cookies.remove("userInfo");
+    Cookies.remove("cartItems");
+    router.push("/");
+  };
+
   return (
     <div>
       <Head>
@@ -75,7 +138,7 @@ function Layout({ title, description, children }) {
 
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppBar position="static" className={classes.navbar}>
+        <AppBar position="sticky" className={classes.navbar}>
           <Toolbar>
             <NextLink href="/" passHref>
               <Link>
@@ -83,24 +146,33 @@ function Layout({ title, description, children }) {
                 <Image
                   src="/1280px-Nextjs-logo.svg.png"
                   alt="Next.JS"
-                  width={80}
-                  height={50}
+                  width={60}
+                  height={45}
                   layout="intrinsic"
                 />
               </Link>
             </NextLink>
-            <NextLink href="/" passHref>
+            {/* <NextLink href="/" passHref>
               <Link>
                 <Typography className={classes.menu}>Shop</Typography>
               </Link>
-            </NextLink>
-            <NextLink href="/" passHref>
-              <Link>
-                <Typography className={classes.menu}>About</Typography>
-              </Link>
-            </NextLink>
+            </NextLink> */}
             <div className={classes.grow}></div>
-            <div>
+            <div className={classes.rightsection}>
+              {/* <NextLink href="/about" passHref>
+                <Link> */}
+              <IconButton
+                aria-label="About Me"
+                color="inherit"
+                href="https://jonghyun.cf"
+                target="_blank"
+              >
+                <ContactsTwoToneIcon />
+              </IconButton>
+
+              {/* <Typography className={classes.menu}>ME</Typography> */}
+              {/* </Link>
+              </NextLink> */}
               <Switch
                 checked={darkMode}
                 onChange={darkModeChangeHandler}
@@ -108,27 +180,73 @@ function Layout({ title, description, children }) {
                 name="darkMode-Checkbox"
                 inputProps={{ "aria-label": "secondary darkMode-Checkbox" }}
               ></Switch>
-              <NextLink href="/cart" passHref>
-                <Link>
-                  <Badge
-                    color="error"
-                    badgeContent={cart.cartItems.length}
-                    showZero
+              {/* <NextLink href="/cart" passHref>
+                <Link> */}
+              <IconButton aria-label="Cart" color="inherit" href="/cart">
+                <Badge
+                  color="error"
+                  badgeContent={cart.cartItems.length}
+                  showZero
+                >
+                  <ShoppingCartTwoToneIcon />
+                </Badge>
+              </IconButton>
+
+              {/* </Link>
+              </NextLink> */}
+              {userInfo ? (
+                <>
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="simple-menu"
+                    aria-haspopup="true"
+                    color="inherit"
+                    onClick={loginClickHandler}
                   >
-                    <ShoppingCartTwoToneIcon />
-                  </Badge>
-                </Link>
-              </NextLink>
-              <NextLink href="/login" passHref>
-                <Link>Login</Link>
-              </NextLink>
+                    <SupervisorAccountTwoTone />
+                  </IconButton>
+                  {/* <Button
+                    aria-controls="simple-menu"
+                    aria-haspopup="true"
+                    onClick={loginClickHandler}
+                    className={classes.navbarButton}
+                  >
+                    {userInfo.name}
+                  </Button> */}
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={loginMenuCloseHandler}
+                  >
+                    <MenuItem onClick={loginMenuCloseHandler}>Profile</MenuItem>
+                    <MenuItem onClick={loginMenuCloseHandler}>
+                      My account
+                    </MenuItem>
+                    <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
+                  </Menu>
+                </>
+              ) : (
+                <>
+                  <NextLink href="/login" passHref>
+                    <Link>Login</Link>
+                  </NextLink>
+                </>
+              )}
             </div>
           </Toolbar>
         </AppBar>
+        <Toolbar id="back-to-top-anchor" className={classes.scrolltopanchor} />
         <Container className={classes.main}>{children}</Container>
         <footer className={classes.footer}>
           <Typography>© 2021 Dylan Park. Next E-Commerce.</Typography>
         </footer>
+        <ScrollTop {...props}>
+          <Fab color="secondary" size="small" aria-label="scroll back to top">
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </ScrollTop>
       </ThemeProvider>
     </div>
   );

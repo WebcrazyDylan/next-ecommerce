@@ -23,8 +23,10 @@ import {
 } from "@material-ui/core";
 import DeleteForeverTwoToneIcon from "@material-ui/icons/DeleteForeverTwoTone";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function CartScreen() {
+  const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const {
     cart: { cartItems }
@@ -40,6 +42,9 @@ export default function CartScreen() {
   };
   const removeItemHandler = (item) => {
     dispatch({ type: "CART_REMOVE_ITEM", payload: item });
+  };
+  const checkoutHandler = () => {
+    router.push("/shipping");
   };
 
   return (
@@ -60,7 +65,7 @@ export default function CartScreen() {
           </Typography>
         </div>
       ) : (
-        <Grid container spacing={5}>
+        <Grid container spacing={1}>
           <Grid item md={9} xs={12}>
             <TableContainer>
               <Table>
@@ -137,7 +142,12 @@ export default function CartScreen() {
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  <Button variant="contained" color="primary" fullWidth>
+                  <Button
+                    onClick={checkoutHandler}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
                     Check Out
                   </Button>
                 </ListItem>

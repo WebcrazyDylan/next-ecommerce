@@ -138,7 +138,7 @@ export async function getServerSideProps(context) {
   await db.disconnect();
   return {
     props: {
-      product: db.convertDocToObj(product)
+      product: product ? db.convertDocToObj(product) : null
     }
   };
 }

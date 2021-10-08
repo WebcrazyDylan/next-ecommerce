@@ -1,8 +1,16 @@
 import { makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  scrolltop: {
+    position: "fixed",
+    bottom: theme.spacing(2),
+    right: theme.spacing(2)
+  },
+  scrolltopanchor: {
+    minHeight: "0vh"
+  },
   navbar: {
-    backgroundColor: "#ff8800",
+    backgroundColor: "#008060",
     "& a": {
       color: "#ffffff",
       marginLeft: 10
@@ -13,12 +21,15 @@ const useStyles = makeStyles({
     fontSize: "1.5rem"
   },
   menu: {
-    paddingLeft: 10,
+    paddingLeft: 8,
     fontWeight: "bold",
-    fontSize: "1.5rem"
+    fontSize: "1.3rem"
   },
   grow: {
     flexGrow: 1
+  },
+  rightsection: {
+    width: "auto"
   },
   main: {
     minHeight: "80vh"
@@ -31,7 +42,15 @@ const useStyles = makeStyles({
   section: {
     marginTop: 10,
     marginBottom: 10
+  },
+  form: {
+    maxWidth: 800,
+    margin: "0 auto"
+  },
+  navbarButton: {
+    color: "#ffffff",
+    textTransform: "initial"
   }
-});
+}));
 
 export default useStyles;
