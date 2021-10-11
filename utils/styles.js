@@ -50,6 +50,16 @@ const useStyles = makeStyles((theme) => ({
   navbarButton: {
     color: "#ffffff",
     textTransform: "initial"
+  },
+  transparentBackgroud: {
+    backgroundColor: "transparent"
+  },
+  fullwidth: {
+    width: "100%",
+    textAlign: "center",
+    "& > * + *": {
+      marginTop: theme.spacing(0.2)
+    }
   }
 }));
 
