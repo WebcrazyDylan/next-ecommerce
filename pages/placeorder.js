@@ -14,7 +14,7 @@ import {
   TableRow,
   TableCell,
   Link,
-  CircularProgress,
+  //   CircularProgress,
   Button,
   Card,
   List,
@@ -228,7 +228,7 @@ export default function PlaceOrder() {
 
               <ListItem>
                 {loading ? (
-                  <div className={classes.fullwidth}>
+                  <div className={classes.fullWidth}>
                     <LinearProgress color="primary" />
                     {/* <CircularProgress /> */}
                     <LinearProgress color="secondary" />

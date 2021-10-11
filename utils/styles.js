@@ -54,12 +54,15 @@ const useStyles = makeStyles((theme) => ({
   transparentBackgroud: {
     backgroundColor: "transparent"
   },
-  fullwidth: {
+  fullWidth: {
     width: "100%",
     textAlign: "center",
     "& > * + *": {
       marginTop: theme.spacing(0.2)
     }
+  },
+  error: {
+    color: "#f04040"
   }
 }));
 
