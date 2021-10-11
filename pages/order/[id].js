@@ -22,7 +22,7 @@ import {
 import axios from "axios";
 import { useRouter } from "next/router";
 import useStyles from "../../utils/styles";
-import CheckoutWizard from "../../components/CheckoutWizard";
+// import CheckoutWizard from "../../components/CheckoutWizard";
 import { useSnackbar } from "notistack";
 import { getError } from "../../utils/error";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
@@ -133,6 +133,7 @@ export default function Order({ params }) {
   }
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
+      closeSnackbar();
       try {
         dispatch({ type: "PAY_REQUEST" });
         const { data } = await axios.put(
@@ -157,7 +158,7 @@ export default function Order({ params }) {
 
   return (
     <Layout title={`Order ${orderId}`}>
-      <CheckoutWizard activeStep={3}></CheckoutWizard>
+      {/* <CheckoutWizard activeStep={3}></CheckoutWizard> */}
       <Typography component="h1" variant="h1">
         Order {orderId}
       </Typography>

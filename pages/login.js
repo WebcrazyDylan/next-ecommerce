@@ -16,6 +16,7 @@ import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
+import { getError } from "../utils/error";
 
 export default function Login() {
   const {
@@ -53,10 +54,7 @@ export default function Login() {
       router.push(redirect || "/");
     } catch (err) {
       // alert(err.response.data ? err.response.data.message : err.message);
-      enqueueSnackbar(
-        err.response.data ? err.response.data.message : err.message,
-        { variant: "error" }
-      );
+      enqueueSnackbar(getError(err), { variant: "error" });
     }
   };
 

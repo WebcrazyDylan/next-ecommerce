@@ -16,6 +16,7 @@ import useStyles from "../utils/styles";
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
+import { getError } from "../utils/error";
 
 export default function Register() {
   const {
@@ -60,10 +61,7 @@ export default function Register() {
       router.push(redirect || "/");
     } catch (err) {
       //   alert(err.response.data ? err.response.data.message : err.message);
-      enqueueSnackbar(
-        err.response.data ? err.response.data.message : err.message,
-        { variant: "error" }
-      );
+      enqueueSnackbar(getError(err), { variant: "error" });
     }
   };
   return (
