@@ -27,7 +27,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import ShoppingCartTwoToneIcon from "@material-ui/icons/ShoppingCartTwoTone";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import ContactsTwoToneIcon from "@material-ui/icons/ContactsTwoTone";
+import ContactPhoneTwoToneIcon from "@material-ui/icons/ContactPhoneTwoTone";
 import { SupervisorAccountTwoTone } from "@material-ui/icons";
 
 function ScrollTop(props) {
@@ -170,7 +170,7 @@ function Layout(props) {
                 href="https://jonghyun.cf"
                 target="_blank"
               >
-                <ContactsTwoToneIcon />
+                <ContactPhoneTwoToneIcon />
               </IconButton>
 
               {/* <Typography className={classes.menu}>ME</Typography> */}

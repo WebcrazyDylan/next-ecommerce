@@ -105,7 +105,12 @@ export default function AdminDashboard() {
                         </CardContent>
                         <CardActions>
                           <NextLink href="/admin/orders" passHref>
-                            <Button size="small" color="primary">
+                            <Button
+                              size="small"
+                              color="primary"
+                              fullWidth
+                              variant="outlined"
+                            >
                               View sales
                             </Button>
                           </NextLink>
@@ -122,7 +127,12 @@ export default function AdminDashboard() {
                         </CardContent>
                         <CardActions>
                           <NextLink href="/admin/orders" passHref>
-                            <Button size="small" color="primary">
+                            <Button
+                              size="small"
+                              color="primary"
+                              fullWidth
+                              variant="outlined"
+                            >
                               View orders
                             </Button>
                           </NextLink>
@@ -139,7 +149,12 @@ export default function AdminDashboard() {
                         </CardContent>
                         <CardActions>
                           <NextLink href="/admin/products" passHref>
-                            <Button size="small" color="primary">
+                            <Button
+                              size="small"
+                              color="primary"
+                              fullWidth
+                              variant="outlined"
+                            >
                               View products
                             </Button>
                           </NextLink>
@@ -156,7 +171,12 @@ export default function AdminDashboard() {
                         </CardContent>
                         <CardActions>
                           <NextLink href="/admin/users" passHref>
-                            <Button size="small" color="primary">
+                            <Button
+                              size="small"
+                              color="primary"
+                              fullWidth
+                              variant="outlined"
+                            >
                               View users
                             </Button>
                           </NextLink>
