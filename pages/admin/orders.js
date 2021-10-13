@@ -52,7 +52,10 @@ export default function AdminOrders() {
   useEffect(() => {
     if (!userInfo) {
       router.push("/login");
+    } else if (!userInfo.isAdmin) {
+      router.push("/");
     }
+
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
@@ -80,6 +83,11 @@ export default function AdminOrders() {
               <NextLink href="/admin/orders" passHref>
                 <ListItem selected button component="a">
                   <ListItemText primary="Orders"></ListItemText>
+                </ListItem>
+              </NextLink>
+              <NextLink href="/admin/products" passHref>
+                <ListItem button component="a">
+                  <ListItemText primary="Products"></ListItemText>
                 </ListItem>
               </NextLink>
             </List>
