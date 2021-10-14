@@ -64,6 +64,15 @@ const useStyles = makeStyles((theme) => ({
   },
   error: {
     color: "#f04040"
+  },
+  reviewForm: {
+    maxWidth: 800,
+    width: "100%"
+  },
+  reviewItem: {
+    marginRight: "1rem",
+    borderRight: "1px #808080 solid",
+    paddingRight: "1rem"
   }
 }));
 

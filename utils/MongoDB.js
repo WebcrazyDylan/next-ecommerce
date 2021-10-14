@@ -22,7 +22,7 @@ async function connect() {
     useUnifiedTopology: true
     // useCreateIndex: true
   });
-  console.log("new connection");
+  console.log("New connection");
   connection.isConnected = db.connections[0].readyState;
 }
 
@@ -31,8 +31,9 @@ async function disconnect() {
     if (process.env.NODE_ENV === "production") {
       await mongoose.disconnect();
       connection.isConnected = false;
+      console.log("DB disconnected");
     } else {
-      console.log("not disconnected");
+      console.log("Not disconnected");
     }
   }
 }

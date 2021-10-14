@@ -8,6 +8,7 @@ import {
   Grid,
   Typography
 } from "@material-ui/core";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import NextLink from "next/link";
 import Layout from "../components/Layout";
 // import data from "../utils/data";
@@ -17,6 +18,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { Store } from "../utils/Store";
+import Rating from "@material-ui/lab/Rating";
 
 export default function Home(props) {
   const router = useRouter();
@@ -52,20 +54,39 @@ export default function Home(props) {
                       title={product.name}
                     ></CardMedia>
                     <CardContent>
-                      <Typography>{product.name}</Typography>
+                      <Grid container>
+                        <Grid item xs={8}>
+                          <Typography>{product.name}</Typography>
+                        </Grid>
+                        <Grid item xs={4} align="right">
+                          <Rating
+                            value={product.rating}
+                            readOnly
+                            precision={0.5}
+                            icon={<FavoriteIcon fontSize="inherit" />}
+                            size="small"
+                          ></Rating>
+                        </Grid>
+                      </Grid>
                     </CardContent>
                   </CardActionArea>
                 </NextLink>
                 <CardActions>
-                  <Typography>${product.price}</Typography>
-                  <Button
-                    size="small"
-                    color="primary"
-                    variant="outlined"
-                    onClick={() => addToCartHandler(product)}
-                  >
-                    Add to cart
-                  </Button>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <Typography>&nbsp;&nbsp;${product.price}</Typography>
+                    </Grid>
+                    <Grid item xs={6} align="right">
+                      <Button
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={() => addToCartHandler(product)}
+                      >
+                        Add to cart
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </CardActions>
               </Card>
             </Grid>
@@ -78,7 +99,7 @@ export default function Home(props) {
 
 export async function getServerSideProps() {
   await db.connect();
-  const products = await Product.find({}).lean();
+  const products = await Product.find({}, "-reviews").lean();
   await db.disconnect();
   return {
     props: {

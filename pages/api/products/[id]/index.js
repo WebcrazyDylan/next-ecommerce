@@ -1,6 +1,6 @@
 import nc from "next-connect";
-import Product from "../../../models/Product";
-import db from "../../../utils/MongoDB";
+import Product from "../../../../../models/Product";
+import db from "../../../../../utils/MongoDB";
 
 const handler = nc();
 
