@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
 import nextConnect from "next-connect";
-// import { onError } from "../../../../utils/error";
+import { onError } from "../../../../utils/error";
 import db from "../../../../utils/MongoDB";
 import Product from "../../../../models/Product";
 import { isAuth } from "../../../../utils/auth";
 
-const handler = nextConnect({});
+const handler = nextConnect({ onError });
 
 handler.get(async (req, res) => {
-  db.connect();
+  await db.connect();
   const product = await Product.findById(req.query.id);
-  db.disconnect();
+  await db.disconnect();
   if (product) {
     res.send(product.reviews);
   } else {
