@@ -1,13 +1,11 @@
 import mongoose from "mongoose";
 import nextConnect from "next-connect";
-import { onError } from "../../../../utils/error";
+// import { onError } from "../../../../utils/error";
 import db from "../../../../utils/MongoDB";
 import Product from "../../../../models/Product";
 import { isAuth } from "../../../../utils/auth";
 
-const handler = nextConnect({
-  onError
-});
+const handler = nextConnect({});
 
 handler.get(async (req, res) => {
   db.connect();
