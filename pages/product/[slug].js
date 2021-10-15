@@ -41,6 +41,10 @@ export default function ProductScreen(props) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (comment === "") {
+      enqueueSnackbar("Comment is required", { variant: "error" });
+      return;
+    }
     setLoading(true);
     try {
       await axios.post(
@@ -86,7 +90,8 @@ export default function ProductScreen(props) {
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < quantity) {
-      window.alert("Sorry. Product is out of stock");
+      // window.alert("Sorry. Product is out of stock");
+      enqueueSnackbar("Sorry. Product is out of stock", { variant: "error" });
       return;
     }
     dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });

@@ -12,6 +12,7 @@ import { Store } from "../utils/Store";
 import ProductItem from "../components/ProductItem";
 import Carousel from "react-material-ui-carousel";
 import useStyles from "../utils/styles";
+import { useSnackbar } from "notistack";
 // import HomeIcon from "@material-ui/icons/Home";
 
 export default function Home(props) {
@@ -19,13 +20,15 @@ export default function Home(props) {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { topRatedProducts, featuredProducts } = props;
+  const { enqueueSnackbar } = useSnackbar();
 
   const addToCartHandler = async (product) => {
     const existItem = state.cart.cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < quantity) {
-      window.alert("Sorry. Product is out of stock");
+      // window.alert("Sorry. Product is out of stock");
+      enqueueSnackbar("Sorry. Product is out of stock", { variant: "error" });
       return;
     }
     dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });

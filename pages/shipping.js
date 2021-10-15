@@ -19,7 +19,8 @@ export default function Shipping() {
     handleSubmit,
     control,
     formState: { errors },
-    setValue
+    setValue,
+    getValues
   } = useForm();
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
@@ -27,6 +28,8 @@ export default function Shipping() {
     userInfo,
     cart: { shippingAddress }
   } = state;
+  const { location } = shippingAddress;
+
   useEffect(() => {
     if (!userInfo) {
       router.push("/login?redirect=/shipping");
@@ -42,7 +45,7 @@ export default function Shipping() {
   const submitHandler = ({ fullName, address, city, postalCode, country }) => {
     dispatch({
       type: "SAVE_SHIPPING_ADDRESS",
-      payload: { fullName, address, city, postalCode, country }
+      payload: { fullName, address, city, postalCode, country, location }
     });
     Cookies.set(
       "shippingAddress",
@@ -51,11 +54,37 @@ export default function Shipping() {
         address,
         city,
         postalCode,
-        country
+        country,
+        location
       })
     );
     router.push("/payment");
   };
+
+  const chooseLocationHandler = () => {
+    const fullName = getValues("fullName");
+    const address = getValues("address");
+    const city = getValues("city");
+    const postalCode = getValues("postalCode");
+    const country = getValues("country");
+    dispatch({
+      type: "SAVE_SHIPPING_ADDRESS",
+      payload: { fullName, address, city, postalCode, country, location }
+    });
+    Cookies.set(
+      "shippingAddress",
+      JSON.stringify({
+        fullName,
+        address,
+        city,
+        postalCode,
+        country,
+        location
+      })
+    );
+    router.push("/map");
+  };
+
   return (
     <Layout title="Shipping Address">
       <CheckoutWizard activeStep={1} />
@@ -204,6 +233,19 @@ export default function Shipping() {
               )}
             ></Controller>
           </ListItem>
+          <ListItem>
+            <Button
+              variant="contained"
+              type="button"
+              onClick={chooseLocationHandler}
+            >
+              Choose on map
+            </Button>
+            <Typography>
+              {location.lat && `${location.lat}, ${location.lng}`}
+            </Typography>
+          </ListItem>
+
           <ListItem>
             <Button variant="contained" type="submit" fullWidth color="primary">
               Continue

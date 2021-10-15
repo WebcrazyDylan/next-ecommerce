@@ -113,6 +113,19 @@ const useStyles = makeStyles((theme) => ({
   featuredImage: {
     width: "100%",
     maxHeight: "60vh"
+  },
+  fullContainer: { height: "100vh" },
+  mapInputBox: {
+    position: "absolute",
+    display: "flex",
+    left: 0,
+    right: 0,
+    margin: "10px auto",
+    width: 300,
+    height: 40,
+    "& input": {
+      width: 250
+    }
   }
 }));
 
