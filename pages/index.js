@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 import { Grid, Link, Typography } from "@material-ui/core";
 import Layout from "../components/Layout";
 // import data from "../utils/data";
