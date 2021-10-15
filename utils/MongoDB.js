@@ -29,11 +29,11 @@ async function connect() {
 async function disconnect() {
   if (connection.isConnected) {
     // if (process.env.NODE_ENV === "production") {
-    await mongoose.disconnect();
-    connection.isConnected = false;
-    console.log("DB disconnected");
+    // await mongoose.disconnect();
+    // connection.isConnected = false;
+    // console.log("DB disconnected");
     // } else {
-    // console.log("Not disconnected");
+    console.log("Not disconnected");
     // }
   }
 }

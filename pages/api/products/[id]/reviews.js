@@ -10,12 +10,12 @@ const handler = nextConnect({ onError });
 handler.get(async (req, res) => {
   await db.connect();
   const product = await Product.findById(req.query.id);
-  await db.disconnect();
   if (product) {
     res.send(product.reviews);
   } else {
     res.status(404).send({ message: "Product not found" });
   }
+  await db.disconnect();
 });
 
 handler.use(isAuth).post(async (req, res) => {

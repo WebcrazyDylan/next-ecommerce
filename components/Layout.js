@@ -19,16 +19,32 @@ import {
   Zoom,
   useScrollTrigger,
   Fab,
-  IconButton
+  IconButton,
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  Divider,
+  ListItemText,
+  InputBase
 } from "@material-ui/core";
+import ShoppingCartTwoToneIcon from "@material-ui/icons/ShoppingCartTwoTone";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import ContactPhoneTwoToneIcon from "@material-ui/icons/ContactPhoneTwoTone";
+import SupervisorAccountTwoToneIcon from "@material-ui/icons/SupervisorAccountTwoTone";
+import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
+// import CancelIcon from "@material-ui/icons/Cancel";
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import ShoppingCartTwoToneIcon from "@material-ui/icons/ShoppingCartTwoTone";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import ContactPhoneTwoToneIcon from "@material-ui/icons/ContactPhoneTwoTone";
-import { SupervisorAccountTwoTone } from "@material-ui/icons";
+import { getError } from "../utils/error";
+import { useSnackbar } from "notistack";
+import axios from "axios";
+import { useEffect } from "react";
+// import db from "../utils/MongoDB";
+// import Product from "../models/Product";
 
 function ScrollTop(props) {
   const { children, window } = props;
@@ -106,6 +122,39 @@ function Layout(props) {
     }
   });
   const classes = useStyles();
+
+  const [sidbarVisible, setSidebarVisible] = useState(false);
+  const sidebarOpenHandler = () => {
+    setSidebarVisible(true);
+  };
+  const sidebarCloseHandler = () => {
+    setSidebarVisible(false);
+  };
+
+  const [categories, setCategories] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await axios.get(`/api/products/categories`);
+      setCategories(data);
+    } catch (err) {
+      enqueueSnackbar(getError(err), { variant: "error" });
+    }
+  };
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const [query, setQuery] = useState("");
+  const queryChangeHandler = (e) => {
+    setQuery(e.target.value);
+  };
+  const submitHandler = (e) => {
+    e.preventDefault();
+    router.push(`/search?query=${query}`);
+  };
+
   const darkModeChangeHandler = () => {
     dispatch({ type: darkMode ? "DARK_MODE_OFF" : "DARK_MODE_ON" });
     const newDarkMode = !darkMode;
@@ -142,25 +191,123 @@ function Layout(props) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar position="sticky" className={classes.navbar}>
-          <Toolbar>
-            <NextLink href="/" passHref>
-              <Link>
-                {/* <Typography className={classes.brand}>Next.JS</Typography> */}
-                <Image
-                  src="/1280px-Nextjs-logo.svg.png"
-                  alt="Next.JS"
-                  width={60}
-                  height={45}
-                  layout="intrinsic"
-                />
-              </Link>
-            </NextLink>
+          <Toolbar className={classes.toolbar}>
+            <Box display="flex" alignItems="center">
+              <IconButton
+                edge="start"
+                aria-label="open drawer"
+                onClick={sidebarOpenHandler}
+              >
+                <MenuIcon className={classes.navbarButton} />
+              </IconButton>
+              <NextLink href="/" passHref>
+                <Link>
+                  {/* <Typography className={classes.brand}>Next.JS</Typography> */}
+                  <Image
+                    src="/1280px-Nextjs-logo.svg.png"
+                    alt="Next.JS"
+                    width={60}
+                    height={45}
+                    layout="intrinsic"
+                  />
+                </Link>
+              </NextLink>
+            </Box>
+            <Drawer
+              anchor="left"
+              open={sidbarVisible}
+              onClose={sidebarCloseHandler}
+            >
+              <List>
+                <ListItem className={classes.navbar}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Image
+                      src="/1280px-Nextjs-logo.svg.png"
+                      alt="Next.JS"
+                      width={60}
+                      height={45}
+                      layout="intrinsic"
+                    />
+
+                    {/* <IconButton
+                      aria-label="close"
+                      onClick={sidebarCloseHandler}
+                    >
+                      <CancelIcon />
+                    </IconButton> */}
+                  </Box>
+                </ListItem>
+                <ListItem className={classes.navbar}>
+                  {/* <Typography>Shopping by category</Typography> */}
+                  <div>
+                    <form
+                      onSubmit={submitHandler}
+                      className={classes.searchForm}
+                    >
+                      <InputBase
+                        name="query"
+                        className={classes.searchInput}
+                        placeholder="Search products"
+                        onChange={queryChangeHandler}
+                      />
+                      <IconButton
+                        type="submit"
+                        className={classes.iconButton}
+                        aria-label="search"
+                      >
+                        <SearchIcon />
+                      </IconButton>
+                    </form>
+                  </div>
+                </ListItem>
+                <Divider light />
+                {categories.map((category) => (
+                  <NextLink
+                    key={category}
+                    href={`/search?category=${category}`}
+                    passHref
+                  >
+                    <ListItem
+                      button
+                      component="a"
+                      onClick={sidebarCloseHandler}
+                    >
+                      <ListItemText primary={category}></ListItemText>
+                    </ListItem>
+                  </NextLink>
+                ))}
+              </List>
+            </Drawer>
+
             {/* <NextLink href="/" passHref>
               <Link>
                 <Typography className={classes.menu}>Shop</Typography>
               </Link>
             </NextLink> */}
-            <div className={classes.grow}></div>
+
+            {/* <div className={classes.grow}></div> */}
+            <div className={classes.searchSection}>
+              <form onSubmit={submitHandler} className={classes.searchForm}>
+                <InputBase
+                  name="query"
+                  className={classes.searchInput}
+                  placeholder="Search products"
+                  onChange={queryChangeHandler}
+                />
+                <IconButton
+                  type="submit"
+                  className={classes.iconButton}
+                  aria-label="search"
+                >
+                  <SearchIcon />
+                </IconButton>
+              </form>
+            </div>
+
             <div className={classes.rightsection}>
               {/* <NextLink href="/about" passHref>
                 <Link> */}
@@ -184,7 +331,9 @@ function Layout(props) {
                 inputProps={{ "aria-label": "secondary darkMode-Checkbox" }}
               ></Switch>
               {/* <NextLink href="/cart" passHref>
-                <Link> */}
+                    <Link>
+                      <Typography component="span"> Cart
+                */}
               <IconButton aria-label="Cart" color="inherit" href="/cart">
                 <Badge
                   color="error"
@@ -195,7 +344,8 @@ function Layout(props) {
                 </Badge>
               </IconButton>
 
-              {/* </Link>
+              {/* </Typography> 
+                </Link>
               </NextLink> */}
               {userInfo ? (
                 <>
@@ -206,7 +356,7 @@ function Layout(props) {
                     color="inherit"
                     onClick={loginClickHandler}
                   >
-                    <SupervisorAccountTwoTone />
+                    <SupervisorAccountTwoToneIcon />
                   </IconButton>
                   {/* <Button
                     aria-controls="simple-menu"
@@ -250,7 +400,9 @@ function Layout(props) {
               ) : (
                 <>
                   <NextLink href="/login" passHref>
-                    <Link>Login</Link>
+                    <Link>
+                      <Typography component="span">Login</Typography>
+                    </Link>
                   </NextLink>
                 </>
               )}
@@ -272,4 +424,16 @@ function Layout(props) {
   );
 }
 
+// export async function getServerSideProps(context) {
+//   const { props } = context;
+//   await db.connect();
+//   const categories = await Product.find().distinct("category").lean();
+//   await db.disconnect();
+
+//   return {
+//     props: { ...props, categories: categories.map(db.convertDocToObj) }
+//   };
+// }
+
 export default dynamic(() => Promise.resolve(Layout), { ssr: false });
+// export default Layout;
