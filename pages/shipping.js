@@ -242,7 +242,9 @@ export default function Shipping() {
               Choose on map
             </Button>
             <Typography>
-              {location.lat && `${location.lat}, ${location.lng}`}
+              {location && location.lat
+                ? `${location.lat}, ${location.lng}`
+                : ""}
             </Typography>
           </ListItem>
 
