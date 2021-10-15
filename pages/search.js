@@ -115,7 +115,7 @@ export default function Search(props) {
   return (
     <Layout title="Search">
       <Grid className={classes.mt1} container spacing={1}>
-        <Grid item md={3}>
+        <Grid item md={3} sm={3} xs={3}>
           <List>
             <ListItem>
               <Box className={classes.fullWidth}>
@@ -174,7 +174,7 @@ export default function Search(props) {
             </ListItem>
           </List>
         </Grid>
-        <Grid item md={9}>
+        <Grid item md={9} sm={9} xs={9}>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item>
               {products.length === 0 ? "No" : countProducts} Results
@@ -208,7 +208,7 @@ export default function Search(props) {
           </Grid>
           <Grid className={classes.mt1} container spacing={3}>
             {products.map((product) => (
-              <Grid item md={4} key={product.name}>
+              <Grid item md={4} sm={6} key={product.name}>
                 <ProductItem
                   product={product}
                   addToCartHandler={addToCartHandler}

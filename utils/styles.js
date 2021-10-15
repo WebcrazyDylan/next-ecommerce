@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import { Height } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   scrolltop: {
@@ -108,6 +109,10 @@ const useStyles = makeStyles((theme) => ({
   },
   sort: {
     marginRight: 5
+  },
+  featuredImage: {
+    width: "100%",
+    maxHeight: "60vh"
   }
 }));
 
