@@ -3,6 +3,6 @@
 Build E-Commerce Website Like Amazon by Next.js & Mongo DB & PayPal
 
 - Source Code    :  https://github.com/WebcrazyDylan/next-ecommerce
-- Demo Website :  https://nextjs-shop-dylan.vercel.app
+- Demo Website :  https://nextshop.jonghyun.ga
 
 - Dylan Park : https://jonghyun.cf
